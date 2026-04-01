@@ -46,6 +46,36 @@ An AI-powered medical appointment booking system. Members chat with an AI assist
 
 ---
 
+## Screenshots
+
+**AI Booking Chat**
+
+<p align="center">
+  <img src="docs/images/chat-start.png" width="45%" alt="Chat start" />
+  &nbsp;&nbsp;
+  <img src="docs/images/chat-provider-selection.png" width="45%" alt="Provider selection" />
+</p>
+<p align="center">
+  <img src="docs/images/chat-slot-selection.png" width="45%" alt="Slot selection" />
+  &nbsp;&nbsp;
+  <img src="docs/images/chat-booked.png" width="45%" alt="Appointment booked" />
+</p>
+
+**Provider Dashboard**
+
+<p align="center">
+  <img src="docs/images/provider-onboarding.png" width="45%" alt="Provider onboarding" />
+  &nbsp;&nbsp;
+  <img src="docs/images/provider-dashboard-pending.png" width="45%" alt="Provider dashboard with pending appointment" />
+</p>
+<p align="center">
+  <img src="docs/images/provider-availability.png" width="45%" alt="Availability management" />
+  &nbsp;&nbsp;
+  <img src="docs/images/provider-confirm-modal.png" width="45%" alt="Confirm appointment modal" />
+</p>
+
+---
+
 ## Tech Stack
 
 **Backend**
