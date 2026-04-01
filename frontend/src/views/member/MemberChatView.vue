@@ -6,7 +6,6 @@
         variant="ghost"
         color="neutral"
         icon="i-heroicons-arrow-left"
-        class="!text-black hover:!text-white"
         :to="{ name: 'member-dashboard' }"
       >
         Back

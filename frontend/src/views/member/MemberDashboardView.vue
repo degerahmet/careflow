@@ -13,7 +13,7 @@
           <UButton :to="{ name: 'member-chat' }" icon="i-heroicons-plus">
             New Appointment
           </UButton>
-          <UButton variant="outline" color="neutral" class="cursor-pointer !border-gray-800 !border-2 hover:!bg-gray-600" @click="logout">
+          <UButton variant="outline" class="cursor-pointer" @click="logout">
             Sign out
           </UButton>
         </div>

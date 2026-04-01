@@ -6,79 +6,74 @@
       <div class="p-6 max-w-3xl mx-auto space-y-6">
         <h1 class="text-xl font-semibold">Availability</h1>
 
-        <!-- Date picker -->
-        <div class="space-y-1">
-          <label class="text-sm font-medium">Select date</label>
-          <input
-            v-model="selectedDate"
-            type="date"
-            class="block border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 [color-scheme:light]"
-            @change="selected = new Set()"
-          />
-        </div>
-        <!-- Legend -->
-         <div class="flex items-center gap-4 text-xs">
-           <span class="flex items-center gap-1">
-             <span class="w-3 h-3 rounded bg-green-100 border border-green-400 inline-block" />
-             Saved (click to remove)
-           </span>
-           <span class="flex items-center gap-1">
-             <span class="w-3 h-3 rounded bg-primary-100 border border-primary-400 inline-block" />
-             Selected
-           </span>
-           <span class="flex items-center gap-1">
-             <span class="w-3 h-3 rounded bg-white border border-gray-300 inline-block" />
-             Available
-           </span>
-         </div>
+        <div class="flex flex-col sm:flex-row gap-6 items-start">
+          <!-- Calendar -->
+          <UCalendar v-model="calendarDate" />
 
-        <!-- Loading -->
-        <div v-if="loading" class="flex items-center justify-center py-16">
-          <UIcon name="i-lucide-loader-circle" class="animate-spin text-3xl" />
-        </div>
+          <!-- Right column: legend + slot grid -->
+          <div class="flex-1 space-y-4">
+            <!-- Legend -->
+            <div class="flex items-center gap-4 text-xs">
+              <span class="flex items-center gap-1">
+                <span class="w-3 h-3 rounded bg-green-100 border border-green-400 inline-block" />
+                Saved (click to remove)
+              </span>
+              <span class="flex items-center gap-1">
+                <span class="w-3 h-3 rounded bg-primary-100 border border-primary-400 inline-block" />
+                Selected
+              </span>
+              <span class="flex items-center gap-1">
+                <span class="w-3 h-3 rounded bg-white border border-gray-300 inline-block" />
+                Available
+              </span>
+            </div>
 
-        <!-- Error -->
-        <div v-else-if="error" class="space-y-3">
-          <UAlert color="error" variant="soft" :description="error" />
-          <UButton variant="outline" size="sm" @click="load">Try again</UButton>
-        </div>
-        
+            <!-- Loading -->
+            <div v-if="loading" class="flex items-center justify-center py-16">
+              <UIcon name="i-lucide-loader-circle" class="animate-spin text-3xl" />
+            </div>
 
-        <!-- Slot grid -->
-        <div v-else class="space-y-4">
-          <div class="grid grid-cols-4 gap-2 sm:grid-cols-5">
-            <button
-              v-for="slot in ALL_SLOTS"
-              :key="slot"
-              type="button"
-              :class="slotClass(slot)"
-              :disabled="saving"
-              @click="toggleSlot(slot)"
-            >
-              <span class="text-xs font-medium">{{ formatSlotLabel(slot) }}</span>
-              <UIcon
-                v-if="savedStartTimes.has(slot)"
-                name="i-lucide-x"
-                class="text-xs ml-1 shrink-0 "
-              />
-            </button>
+            <!-- Error -->
+            <div v-else-if="error" class="space-y-3">
+              <UAlert color="error" variant="soft" :description="error" />
+              <UButton variant="outline" size="sm" @click="load">Try again</UButton>
+            </div>
+
+            <!-- Slot grid -->
+            <div v-else class="space-y-4">
+              <div class="grid grid-cols-4 gap-2">
+                <button
+                  v-for="slot in ALL_SLOTS"
+                  :key="slot"
+                  type="button"
+                  :class="slotClass(slot)"
+                  :disabled="saving"
+                  @click="toggleSlot(slot)"
+                >
+                  <span class="text-xs font-medium">{{ formatSlotLabel(slot) }}</span>
+                  <UIcon
+                    v-if="savedStartTimes.has(slot)"
+                    name="i-lucide-x"
+                    class="text-xs ml-1 shrink-0"
+                  />
+                </button>
+              </div>
+
+              <!-- Save button -->
+              <div class="pt-2">
+                <UButton
+                  :disabled="selected.size === 0 || saving"
+                  :loading="saving"
+                  @click="saveSlots"
+                >
+                  Save {{ selected.size > 0 ? `${selected.size} slot${selected.size > 1 ? 's' : ''}` : 'slots' }}
+                </UButton>
+              </div>
+
+              <!-- Save error -->
+              <UAlert v-if="saveError" color="error" variant="soft" :description="saveError" />
+            </div>
           </div>
-
-         
-
-          <!-- Save button -->
-          <div class="pt-2">
-            <UButton
-              :disabled="selected.size === 0 || saving"
-              :loading="saving"
-              @click="saveSlots"
-            >
-              Save {{ selected.size > 0 ? `${selected.size} slot${selected.size > 1 ? 's' : ''}` : 'slots' }}
-            </UButton>
-          </div>
-
-          <!-- Save error -->
-          <UAlert v-if="saveError" color="error" variant="soft" :description="saveError" />
         </div>
       </div>
     </main>
@@ -86,16 +81,19 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
+import { today, getLocalTimeZone } from "@internationalized/date";
 import { getAvailability, createSlot, deleteSlot } from "../../api/availability.js";
 import ProviderSidebar from "../../components/ProviderSidebar.vue";
 
 const sidebarCollapsed = ref(false);
 
-// Today as YYYY-MM-DD
-function today() {
-  return new Date().toISOString().slice(0, 10);
-}
+// CalendarDate drives UCalendar; selectedDate is the YYYY-MM-DD string for API calls
+const calendarDate = ref(today(getLocalTimeZone()));
+const selectedDate = computed(() => calendarDate.value.toString());
+
+// Reset pending selections when the user picks a new date
+watch(calendarDate, () => { selected.value = new Set(); });
 
 // "08:00:00" → "08:30:00"
 function addThirtyMin(time) {
@@ -115,7 +113,6 @@ function formatSlotLabel(time) {
   return `${h}:${m}`;
 }
 
-const selectedDate = ref(today());
 const allSlots = ref([]);
 const selected = ref(new Set());
 const loading = ref(false);
