@@ -52,7 +52,7 @@
               <p class="text-sm">{{ formatDate(appt.scheduled_at) }}</p>
               <p v-if="appt.reason" class="text-sm mt-2">{{ appt.reason }}</p>
             </div>
-            <UBadge :color="statusColor(appt.status)" variant="soft" class="shrink-0 capitalize">
+            <UBadge :color="STATUS_COLOR[appt.status] ?? 'neutral'" variant="soft" class="shrink-0 capitalize">
               {{ appt.status }}
             </UBadge>
           </div>
@@ -67,6 +67,7 @@ import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "../../stores/auth.js";
 import { getMemberAppointments } from "../../api/appointments.js";
+import { STATUS_COLOR } from "../../constants/status.js";
 
 const SPECIALTY_LABELS = {
   GEN: "General Practice",
@@ -97,11 +98,6 @@ function specialtyLabel(code) {
   return SPECIALTY_LABELS[code] ?? code;
 }
 
-function statusColor(status) {
-  if (status === "accepted") return "success";
-  if (status === "rejected") return "error";
-  return "warning";
-}
 
 function formatDate(iso) {
   return new Date(iso).toLocaleString(undefined, {

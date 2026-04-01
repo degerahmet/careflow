@@ -143,7 +143,7 @@
               </div>
               <div class="flex justify-between">
                 <span>Status</span>
-                <UBadge color="warning" variant="soft" class="capitalize">{{ data.appointment?.status }}</UBadge>
+                <UBadge :color="STATUS_COLOR[data.appointment?.status] ?? 'neutral'" variant="soft" class="capitalize">{{ data.appointment?.status }}</UBadge>
               </div>
             </div>
             <template #footer>
@@ -188,6 +188,7 @@
 import { ref, nextTick, watch, onMounted } from "vue";
 import { useAuthStore } from "../../stores/auth.js";
 import { sendChatMessage, getSessionId, setSessionId, clearSessionId, getSession } from "../../api/agent.js";
+import { STATUS_COLOR } from "../../constants/status.js";
 import MarkdownMessage from "../../components/MarkdownMessage.vue";
 
 const SPECIALTY_LABELS = {

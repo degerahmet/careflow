@@ -120,6 +120,7 @@
 import { ref, computed, onMounted } from "vue";
 import { getProfile } from "../../api/provider.js";
 import { getProviderAppointments, updateAppointmentStatus } from "../../api/appointments.js";
+import { STATUS_COLOR } from "../../constants/status.js";
 import ProviderOnboardingModal from "../../components/ProviderOnboardingModal.vue";
 import ProviderSidebar from "../../components/ProviderSidebar.vue";
 
@@ -160,12 +161,6 @@ const actionColor = computed(() =>
   pendingAction.value?.action === "confirmed" ? "success" : "error"
 );
 
-const STATUS_COLOR = {
-  pending:   "warning",
-  confirmed: "success",
-  cancelled: "error",
-  rejected:  "error",
-};
 
 function formatDate(iso) {
   const d = new Date(iso);
