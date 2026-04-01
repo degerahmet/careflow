@@ -51,27 +51,27 @@ An AI-powered medical appointment booking system. Members chat with an AI assist
 **AI Booking Chat**
 
 <p align="center">
-  <img src="docs/images/chat-start.png" width="45%" alt="Chat start" />
+  <img src="docs/images/chat-start.png" width="100%" alt="Chat start" />
   &nbsp;&nbsp;
-  <img src="docs/images/chat-provider-selection.png" width="45%" alt="Provider selection" />
+  <img src="docs/images/chat-provider-selection.png" width="100%" alt="Provider selection" />
 </p>
 <p align="center">
-  <img src="docs/images/chat-slot-selection.png" width="45%" alt="Slot selection" />
+  <img src="docs/images/chat-slot-selection.png" width="100%" alt="Slot selection" />
   &nbsp;&nbsp;
-  <img src="docs/images/chat-booked.png" width="45%" alt="Appointment booked" />
+  <img src="docs/images/chat-booked.png" width="100%" alt="Appointment booked" />
 </p>
 
 **Provider Dashboard**
 
 <p align="center">
-  <img src="docs/images/provider-onboarding.png" width="45%" alt="Provider onboarding" />
+  <img src="docs/images/provider-onboarding.png" width="100%" alt="Provider onboarding" />
   &nbsp;&nbsp;
-  <img src="docs/images/provider-dashboard-pending.png" width="45%" alt="Provider dashboard with pending appointment" />
+  <img src="docs/images/provider-dashboard-pending.png" width="100%" alt="Provider dashboard with pending appointment" />
 </p>
 <p align="center">
-  <img src="docs/images/provider-availability.png" width="45%" alt="Availability management" />
+  <img src="docs/images/provider-availability.png" width="100%" alt="Availability management" />
   &nbsp;&nbsp;
-  <img src="docs/images/provider-confirm-modal.png" width="45%" alt="Confirm appointment modal" />
+  <img src="docs/images/provider-confirm-modal.png" width="100%" alt="Confirm appointment modal" />
 </p>
 
 ---
