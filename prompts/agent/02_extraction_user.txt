@@ -1,0 +1,12 @@
+Today's date: {today}
+
+Current booking draft (already collected fields):
+{draft}
+
+Providers available for selection:
+{providers}
+
+Slots available for selection:
+{slots}
+
+User message: "{message}"

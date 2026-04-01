@@ -1,0 +1,8 @@
+Current booking step: {step}
+Booking draft (fields collected so far): {draft}
+Providers shown: {providers}
+Slots shown: {slots}
+Appointment just created: {appointment}
+User said: "{message}"
+
+Write the next assistant reply (max 3 sentences).
