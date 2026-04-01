@@ -1,13 +1,37 @@
 <template>
   <div class="min-h-screen flex items-center justify-center bg-gray-50">
     <div class="w-full max-w-md space-y-4">
-      <h2 class="text-2xl font-bold text-gray-900 text-center">Provider Login</h2>
+      <h2 class="text-2xl font-bold text-gray-900 text-center">Member Signup</h2>
       <UCard>
       <template #header>
-        <h1 class="text-xl font-semibold text-gray-900">Provider Login</h1>
+        <h1 class="text-xl font-semibold text-gray-900">Create Member Account</h1>
       </template>
 
       <form class="space-y-4" @submit.prevent="handleSubmit">
+        <div class="grid grid-cols-2 gap-4">
+          <UFormField label="First name" required>
+            <UInput
+              v-model="firstName"
+              type="text"
+              autocomplete="given-name"
+              placeholder="Jane"
+              :disabled="loading"
+              class="w-full"
+            />
+          </UFormField>
+
+          <UFormField label="Last name" required>
+            <UInput
+              v-model="lastName"
+              type="text"
+              autocomplete="family-name"
+              placeholder="Doe"
+              :disabled="loading"
+              class="w-full"
+            />
+          </UFormField>
+        </div>
+
         <UFormField label="Email" required>
           <UInput
             v-model="email"
@@ -23,33 +47,25 @@
           <UInput
             v-model="password"
             type="password"
-            autocomplete="current-password"
-            placeholder="••••••••"
+            autocomplete="new-password"
+            placeholder="Min. 8 characters"
             :disabled="loading"
             class="w-full"
           />
         </UFormField>
 
-        <UAlert
-          v-if="error"
-          color="error"
-          variant="soft"
-          :description="error"
-        />
+        <UAlert v-if="error" color="error" variant="soft" :description="error" />
 
         <UButton type="submit" block :loading="loading">
-          Sign in
+          Create account
         </UButton>
       </form>
 
       <template #footer>
-        <div class="flex flex-col gap-3">
-          <UButton block variant="outline" color="neutral" :to="{ name: 'provider-signup' }">
-            Sign up
-          </UButton>
-          <UButton block variant="outline" color="neutral" class="!border !border-white/40 !font-bold" :to="{ name: 'member-login' }">
-            I'm a member
-          </UButton>
+        <div class="text-sm">
+          <RouterLink :to="{ name: 'member-login' }" class="text-primary-500 hover:underline">
+            Already have an account? Sign in
+          </RouterLink>
         </div>
       </template>
       </UCard>
@@ -60,12 +76,14 @@
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { providerLogin } from "../../api/auth.js";
+import { memberSignup } from "../../api/auth.js";
 import { useAuthStore } from "../../stores/auth.js";
 
 const router = useRouter();
 const authStore = useAuthStore();
 
+const firstName = ref("");
+const lastName = ref("");
 const email = ref("");
 const password = ref("");
 const loading = ref(false);
@@ -76,9 +94,9 @@ async function handleSubmit() {
   error.value = null;
 
   try {
-    const data = await providerLogin(email.value, password.value);
+    const data = await memberSignup(email.value, password.value, firstName.value, lastName.value);
     authStore.setAuth(data);
-    router.push({ name: "provider-dashboard" });
+    router.push({ name: "member-dashboard" });
   } catch (err) {
     error.value = err.message;
   } finally {

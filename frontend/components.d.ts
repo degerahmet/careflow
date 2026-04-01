@@ -11,6 +11,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    MarkdownMessage: typeof import('./src/components/MarkdownMessage.vue')['default']
     ProviderOnboardingModal: typeof import('./src/components/ProviderOnboardingModal.vue')['default']
     ProviderSidebar: typeof import('./src/components/ProviderSidebar.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

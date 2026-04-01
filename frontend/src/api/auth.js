@@ -22,6 +22,14 @@ async function request(url, body) {
   return data;
 }
 
+export function memberLogin(email, password) {
+  return request(`${BASE}/member/login/`, { email, password });
+}
+
+export function memberSignup(email, password, first_name, last_name) {
+  return request(`${BASE}/member/register/`, { email, password, first_name, last_name });
+}
+
 export function providerLogin(email, password) {
   return request(`${BASE}/provider/login/`, { email, password });
 }

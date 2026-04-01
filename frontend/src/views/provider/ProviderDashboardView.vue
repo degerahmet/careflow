@@ -18,9 +18,7 @@
 
       <!-- Dashboard content -->
       <div v-else class="p-6 max-w-4xl mx-auto space-y-6">
-        <div class="flex items-center justify-between">
-          <h1 class="text-xl font-semibold text-gray-900">Appointments</h1>
-        </div>
+        <h1 class="text-xl font-semibold text-gray-900">Appointments</h1>
 
         <!-- Appointments loading -->
         <div v-if="apptLoading" class="flex items-center justify-center py-16">
@@ -41,14 +39,11 @@
 
         <!-- Appointment cards -->
         <div v-else class="space-y-4">
-          <UCard
-            v-for="appt in appointments"
-            :key="appt.id"
-          >
+          <UCard v-for="appt in appointments" :key="appt.id">
             <div class="flex items-start justify-between gap-4">
               <div class="min-w-0 space-y-1">
-                <p class="font-medium text-gray-200 truncate">{{ appt.member_email }}</p>
-                <p class="text-sm text-gray-500">{{ formatDate(appt.scheduled_at) }}</p>
+                <p class="font-medium text-gray-100 truncate">{{ appt.member_email }}</p>
+                <p class="text-sm text-gray-400">{{ formatDate(appt.scheduled_at) }}</p>
               </div>
               <UBadge
                 :color="STATUS_COLOR[appt.status] ?? 'neutral'"
@@ -60,12 +55,32 @@
             </div>
 
             <div class="mt-3 space-y-1">
-              <p class="text-sm text-gray-300">
+              <p class="text-sm text-gray-200">
                 <span class="font-medium">Reason: </span>{{ appt.reason }}
               </p>
-              <p v-if="appt.ai_summary" class="text-sm text-gray-500 italic">
+              <p v-if="appt.ai_summary" class="text-sm text-gray-400 italic">
                 {{ appt.ai_summary }}
               </p>
+            </div>
+
+            <!-- Actions — pending only -->
+            <div v-if="appt.status === 'pending'" class="flex gap-2 mt-4 pt-3 border-t border-gray-100">
+              <UButton
+                size="sm"
+                color="success"
+                variant="soft"
+                @click="pendingAction = { appt, action: 'confirmed' }"
+              >
+                Accept
+              </UButton>
+              <UButton
+                size="sm"
+                color="error"
+                variant="soft"
+                @click="pendingAction = { appt, action: 'rejected' }"
+              >
+                Reject
+              </UButton>
             </div>
           </UCard>
         </div>
@@ -73,14 +88,38 @@
 
       <!-- Forced onboarding modal -->
       <ProviderOnboardingModal v-if="showOnboarding" @complete="onOnboardingComplete" />
+
+      <!-- Confirmation modal -->
+      <UModal v-model:open="modalOpen" :title="modalTitle">
+        <template #body>
+          <p class="text-sm text-gray-400">{{ modalBody }}</p>
+          <UAlert
+            v-if="actionError"
+            color="error"
+            variant="soft"
+            :description="actionError"
+            class="mt-3"
+          />
+        </template>
+        <template #footer>
+          <div class="flex justify-end gap-2">
+            <UButton variant="outline" :disabled="actionLoading" @click="modalOpen = false">
+              Cancel
+            </UButton>
+            <UButton :color="actionColor" :loading="actionLoading" @click="confirmAction">
+              Confirm
+            </UButton>
+          </div>
+        </template>
+      </UModal>
     </main>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { getProfile } from "../../api/provider.js";
-import { getProviderAppointments } from "../../api/appointments.js";
+import { getProviderAppointments, updateAppointmentStatus } from "../../api/appointments.js";
 import ProviderOnboardingModal from "../../components/ProviderOnboardingModal.vue";
 import ProviderSidebar from "../../components/ProviderSidebar.vue";
 
@@ -96,10 +135,36 @@ const apptLoading = ref(false);
 const apptError = ref(null);
 const appointments = ref([]);
 
+// Action / modal state
+const pendingAction = ref(null); // { appt, action: "confirmed" | "rejected" } | null
+const actionLoading = ref(false);
+const actionError = ref(null);
+
+const modalOpen = computed({
+  get: () => pendingAction.value !== null,
+  set: (v) => { if (!v) pendingAction.value = null; },
+});
+
+const modalTitle = computed(() =>
+  pendingAction.value?.action === "confirmed" ? "Accept appointment" : "Reject appointment"
+);
+
+const modalBody = computed(() => {
+  if (!pendingAction.value) return "";
+  const { appt, action } = pendingAction.value;
+  const verb = action === "confirmed" ? "accept" : "reject";
+  return `Are you sure you want to ${verb} the appointment with ${appt.member_email}?`;
+});
+
+const actionColor = computed(() =>
+  pendingAction.value?.action === "confirmed" ? "success" : "error"
+);
+
 const STATUS_COLOR = {
-  pending: "warning",
+  pending:   "warning",
   confirmed: "success",
   cancelled: "error",
+  rejected:  "error",
 };
 
 function formatDate(iso) {
@@ -109,6 +174,23 @@ function formatDate(iso) {
     " at " +
     d.toLocaleTimeString(undefined, { timeStyle: "short" })
   );
+}
+
+async function confirmAction() {
+  const { appt, action } = pendingAction.value;
+  actionLoading.value = true;
+  actionError.value = null;
+
+  try {
+    const updated = await updateAppointmentStatus(appt.id, action);
+    const idx = appointments.value.findIndex((a) => a.id === appt.id);
+    if (idx !== -1) appointments.value[idx] = updated;
+    pendingAction.value = null;
+  } catch (err) {
+    actionError.value = err.message;
+  } finally {
+    actionLoading.value = false;
+  }
 }
 
 async function loadProfile() {

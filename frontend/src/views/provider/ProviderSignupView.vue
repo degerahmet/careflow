@@ -1,6 +1,8 @@
 <template>
   <div class="min-h-screen flex items-center justify-center bg-gray-50">
-    <UCard class="w-full max-w-md">
+    <div class="w-full max-w-md space-y-4">
+      <h2 class="text-2xl font-bold text-gray-900 text-center">Provider Signup</h2>
+      <UCard>
       <template #header>
         <h1 class="text-xl font-semibold text-gray-900">Create Provider Account</h1>
       </template>
@@ -74,7 +76,8 @@
           </RouterLink>
         </div>
       </template>
-    </UCard>
+      </UCard>
+    </div>
   </div>
 </template>
 

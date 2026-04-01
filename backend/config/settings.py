@@ -21,7 +21,10 @@ INSTALLED_APPS = [
     "users",
     "providers",
     "appointments",
+    "agent",
 ]
+
+ANTHROPIC_API_KEY = config("ANTHROPIC_API_KEY", default="")
 
 AUTH_USER_MODEL = "users.User"
 

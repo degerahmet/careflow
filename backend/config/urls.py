@@ -15,6 +15,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/", include(router.urls)),
     path("api/auth/", include("users.urls")),
+    path("api/agent/", include("agent.urls")),
     path("api/provider/profile", ProviderProfileSelfView.as_view(), name="provider-profile-self"),
     # OpenAPI schema + docs
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
