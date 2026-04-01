@@ -11,13 +11,13 @@
       >
         Back
       </UButton>
-      <h1 class="text-base font-semibold text-gray-800">CareFlow AI</h1>
+      <h1 class="text-base font-semibold">CareFlow AI</h1>
       <div class="w-20" />
     </div>
 
     <!-- Rehydrating state -->
     <div v-if="rehydrating" class="flex-1 flex items-center justify-center">
-      <UIcon name="i-heroicons-arrow-path" class="animate-spin text-gray-300 w-6 h-6" />
+      <UIcon name="i-heroicons-arrow-path" class="animate-spin w-6 h-6" />
     </div>
 
     <!-- Message area -->
@@ -39,10 +39,10 @@
           <div
             :class="[
               msg.role === 'user'
-                ? 'text-sm leading-relaxed bg-gray-100 text-gray-900 rounded-3xl px-5 py-3 max-w-xl'
+                ? 'text-sm leading-relaxed bg-gray-100 rounded-3xl px-5 py-3 max-w-xl'
                 : msg.error
                   ? 'text-sm leading-relaxed text-red-500 max-w-2xl pt-1'
-                  : 'text-gray-800 max-w-2xl pt-1',
+                  : 'text-sm max-w-2xl pt-1',
             ]"
           >
             <template v-if="msg.role === 'assistant' && !msg.error">
@@ -57,13 +57,13 @@
           <div class="w-8 h-8 rounded-full bg-primary-500 flex items-center justify-center shrink-0 mt-0.5">
             <UIcon name="i-heroicons-sparkles" class="w-4 h-4 text-white" />
           </div>
-          <div class="text-sm text-gray-400 pt-1">Thinking…</div>
+          <div class="text-sm pt-1">Thinking…</div>
         </div>
 
         <!-- Provider selection -->
         <div v-if="step === 'provider_selection' && !loading" class="mt-2">
-          <p class="text-xs text-gray-400 mb-3">Choose a provider:</p>
-          <p v-if="data.providers.length === 0" class="text-sm text-gray-400">No providers found for this specialty.</p>
+          <p class="text-xs mb-3">Choose a provider:</p>
+          <p v-if="data.providers.length === 0" class="text-sm">No providers found for this specialty.</p>
           <div v-else class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div
               v-for="p in data.providers"
@@ -71,16 +71,16 @@
               class="border border-gray-200 rounded-xl p-4 cursor-pointer hover:border-primary-400 hover:bg-primary-50 transition"
               @click="selectProvider(p)"
             >
-              <p class="font-medium text-gray-900 text-sm">Dr. {{ p.first_name }} {{ p.last_name }}</p>
-              <p class="text-xs text-gray-500 mt-0.5">{{ specialtyLabel(p.specialty) }}</p>
+              <p class="font-medium text-sm">Dr. {{ p.first_name }} {{ p.last_name }}</p>
+              <p class="text-xs mt-0.5">{{ specialtyLabel(p.specialty) }}</p>
             </div>
           </div>
         </div>
 
         <!-- Slot selection -->
         <div v-if="step === 'slot_selection' && !loading" class="mt-2">
-          <p class="text-xs text-gray-400 mb-3">Choose a time slot:</p>
-          <p v-if="data.slots.length === 0" class="text-sm text-gray-400">No slots available for this provider.</p>
+          <p class="text-xs mb-3">Choose a time slot:</p>
+          <p v-if="data.slots.length === 0" class="text-sm">No slots available for this provider.</p>
           <div v-else class="flex flex-wrap gap-2">
             <button
               v-for="s in data.slots"
@@ -97,24 +97,24 @@
         <div v-if="step === 'confirmation' && !loading" class="mt-2">
           <UCard>
             <template #header>
-              <p class="text-sm font-semibold text-gray-100">Booking Summary</p>
+              <p class="text-sm font-semibold">Booking Summary</p>
             </template>
             <div class="space-y-2 text-sm">
               <div class="flex justify-between">
-                <span class="text-gray-400">Provider</span>
-                <span class="text-gray-100">Dr. {{ selectedProvider?.first_name }} {{ selectedProvider?.last_name }}</span>
+                <span>Provider</span>
+                <span class="font-medium">Dr. {{ selectedProvider?.first_name }} {{ selectedProvider?.last_name }}</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-gray-400">Specialty</span>
-                <span class="text-gray-100">{{ specialtyLabel(selectedProvider?.specialty) }}</span>
+                <span>Specialty</span>
+                <span class="font-medium">{{ specialtyLabel(selectedProvider?.specialty) }}</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-gray-400">Date & Time</span>
-                <span class="text-gray-100">{{ selectedSlot ? formatSlot(selectedSlot) : '—' }}</span>
+                <span>Date & Time</span>
+                <span class="font-medium">{{ selectedSlot ? formatSlot(selectedSlot) : '—' }}</span>
               </div>
               <div v-if="data.draft?.reason" class="flex justify-between">
-                <span class="text-gray-400">Reason</span>
-                <span class="text-gray-100">{{ data.draft.reason }}</span>
+                <span>Reason</span>
+                <span class="font-medium">{{ data.draft.reason }}</span>
               </div>
             </div>
             <template #footer>
@@ -129,20 +129,20 @@
             <template #header>
               <div class="flex items-center gap-2">
                 <UIcon name="i-heroicons-check-circle" class="text-green-400 w-5 h-5" />
-                <p class="text-sm font-semibold text-gray-100">Appointment Booked!</p>
+                <p class="text-sm font-semibold">Appointment Booked!</p>
               </div>
             </template>
             <div class="space-y-2 text-sm">
               <div class="flex justify-between">
-                <span class="text-gray-400">Provider</span>
-                <span class="text-gray-100">{{ data.appointment?.provider_name }}</span>
+                <span>Provider</span>
+                <span class="font-medium">{{ data.appointment?.provider_name }}</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-gray-400">Date & Time</span>
-                <span class="text-gray-100">{{ data.appointment ? formatAppointmentDate(data.appointment.scheduled_at) : '—' }}</span>
+                <span>Date & Time</span>
+                <span class="font-medium">{{ data.appointment ? formatAppointmentDate(data.appointment.scheduled_at) : '—' }}</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-gray-400">Status</span>
+                <span>Status</span>
                 <UBadge color="warning" variant="soft" class="capitalize">{{ data.appointment?.status }}</UBadge>
               </div>
             </div>
@@ -177,7 +177,7 @@
           @click="send"
         />
       </div>
-      <p class="text-center text-xs text-gray-400 mt-2">
+      <p class="text-center text-xs mt-2">
         CareFlow AI can make mistakes. Always consult a qualified provider.
       </p>
     </div>

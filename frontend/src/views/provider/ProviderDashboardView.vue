@@ -18,7 +18,7 @@
 
       <!-- Dashboard content -->
       <div v-else class="p-6 max-w-4xl mx-auto space-y-6">
-        <h1 class="text-xl font-semibold text-gray-900">Appointments</h1>
+        <h1 class="text-xl font-semibold">Appointments</h1>
 
         <!-- Appointments loading -->
         <div v-if="apptLoading" class="flex items-center justify-center py-16">
@@ -34,7 +34,7 @@
         <!-- Empty state -->
         <div v-else-if="appointments.length === 0" class="flex flex-col items-center justify-center py-16 text-center">
           <UIcon name="i-lucide-calendar-x" class="text-gray-300 text-5xl mb-4" />
-          <p class="text-gray-500 text-sm">No appointments yet.</p>
+          <p class="text-sm">No appointments yet.</p>
         </div>
 
         <!-- Appointment cards -->
@@ -42,8 +42,8 @@
           <UCard v-for="appt in appointments" :key="appt.id">
             <div class="flex items-start justify-between gap-4">
               <div class="min-w-0 space-y-1">
-                <p class="font-medium text-gray-100 truncate">{{ appt.member_email }}</p>
-                <p class="text-sm text-gray-400">{{ formatDate(appt.scheduled_at) }}</p>
+                <p class="font-medium truncate">{{ appt.member_email }}</p>
+                <p class="text-sm">{{ formatDate(appt.scheduled_at) }}</p>
               </div>
               <UBadge
                 :color="STATUS_COLOR[appt.status] ?? 'neutral'"
@@ -55,10 +55,10 @@
             </div>
 
             <div class="mt-3 space-y-1">
-              <p class="text-sm text-gray-200">
+              <p class="text-sm">
                 <span class="font-medium">Reason: </span>{{ appt.reason }}
               </p>
-              <p v-if="appt.ai_summary" class="text-sm text-gray-400 italic">
+              <p v-if="appt.ai_summary" class="text-sm italic">
                 {{ appt.ai_summary }}
               </p>
             </div>
@@ -92,7 +92,7 @@
       <!-- Confirmation modal -->
       <UModal v-model:open="modalOpen" :title="modalTitle">
         <template #body>
-          <p class="text-sm text-gray-400">{{ modalBody }}</p>
+          <p class="text-sm">{{ modalBody }}</p>
           <UAlert
             v-if="actionError"
             color="error"

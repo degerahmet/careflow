@@ -4,10 +4,10 @@
       <!-- Header -->
       <div class="flex items-center justify-between">
         <div>
-          <h1 class="text-2xl font-bold text-gray-900">
+          <h1 class="text-2xl font-bold">
             Welcome, {{ authStore.user?.first_name }}
           </h1>
-          <p class="text-sm text-gray-500 mt-1">Your appointments</p>
+          <p class="text-sm mt-1">Your appointments</p>
         </div>
         <div class="flex items-center gap-3">
           <UButton :to="{ name: 'member-chat' }" icon="i-heroicons-plus">
@@ -30,7 +30,7 @@
       <!-- Empty -->
       <div v-else-if="appointments.length === 0" class="text-center py-16">
         <UIcon name="i-heroicons-calendar" class="w-12 h-12 text-gray-300 mx-auto mb-3" />
-        <p class="text-gray-500">No appointments yet.</p>
+        <p>No appointments yet.</p>
         <UButton class="mt-4" :to="{ name: 'member-chat' }">
           Book your first appointment
         </UButton>
@@ -45,12 +45,12 @@
         >
           <div class="flex items-start justify-between gap-4">
             <div class="space-y-1">
-              <p class="font-semibold text-gray-100">
+              <p class="font-semibold">
                 Dr. {{ appt.provider.first_name }} {{ appt.provider.last_name }}
               </p>
-              <p class="text-sm text-gray-400">{{ specialtyLabel(appt.provider.specialty) }}</p>
-              <p class="text-sm text-gray-300">{{ formatDate(appt.scheduled_at) }}</p>
-              <p v-if="appt.reason" class="text-sm text-gray-400 mt-2">{{ appt.reason }}</p>
+              <p class="text-sm">{{ specialtyLabel(appt.provider.specialty) }}</p>
+              <p class="text-sm">{{ formatDate(appt.scheduled_at) }}</p>
+              <p v-if="appt.reason" class="text-sm mt-2">{{ appt.reason }}</p>
             </div>
             <UBadge :color="statusColor(appt.status)" variant="soft" class="shrink-0 capitalize">
               {{ appt.status }}

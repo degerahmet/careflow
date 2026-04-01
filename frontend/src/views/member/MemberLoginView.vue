@@ -4,7 +4,7 @@
       <h2 class="text-2xl font-bold text-gray-900 text-center">Member Login</h2>
       <UCard>
       <template #header>
-        <h1 class="text-xl font-semibold text-gray-900">Member Login</h1>
+        <h1 class="text-xl font-semibold">Member Login</h1>
       </template>
 
       <form class="space-y-4" @submit.prevent="handleSubmit">

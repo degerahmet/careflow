@@ -4,20 +4,20 @@
 
     <main class="flex-1 overflow-y-auto">
       <div class="p-6 max-w-3xl mx-auto space-y-6">
-        <h1 class="text-xl font-semibold text-gray-900">Availability</h1>
+        <h1 class="text-xl font-semibold">Availability</h1>
 
         <!-- Date picker -->
         <div class="space-y-1">
-          <label class="text-sm font-medium text-gray-800">Select date</label>
+          <label class="text-sm font-medium">Select date</label>
           <input
             v-model="selectedDate"
             type="date"
-            class="block border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary-500 [color-scheme:light]"
+            class="block border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 [color-scheme:light]"
             @change="selected = new Set()"
           />
         </div>
         <!-- Legend -->
-         <div class="flex items-center gap-4 text-xs text-gray-500">
+         <div class="flex items-center gap-4 text-xs">
            <span class="flex items-center gap-1">
              <span class="w-3 h-3 rounded bg-green-100 border border-green-400 inline-block" />
              Saved (click to remove)
@@ -34,7 +34,7 @@
 
         <!-- Loading -->
         <div v-if="loading" class="flex items-center justify-center py-16">
-          <UIcon name="i-lucide-loader-circle" class="animate-spin text-gray-400 text-3xl" />
+          <UIcon name="i-lucide-loader-circle" class="animate-spin text-3xl" />
         </div>
 
         <!-- Error -->
@@ -139,7 +139,7 @@ function slotClass(slot) {
   if (selected.value.has(slot)) {
     return `${base} bg-primary-50 border-primary-400 text-primary-700 hover:bg-primary-100`;
   }
-  return `${base} bg-white border-gray-300 text-gray-600 hover:bg-gray-50`;
+  return `${base} bg-white border-gray-300 hover:bg-gray-50`;
 }
 
 function toggleSlot(slot) {

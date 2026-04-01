@@ -5,7 +5,15 @@ import ui from "@nuxt/ui/vite";
 export default defineConfig({
   plugins: [
     vue(),
-    ui(),
+    ui({
+      colorMode: false,
+      ui: {
+        colors: {
+          primary: "orange",
+          neutral: "stone",
+        },
+      },
+    }),
   ],
   server: {
     host: "0.0.0.0",
