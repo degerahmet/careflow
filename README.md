@@ -212,6 +212,12 @@ prompts/agent/
 
 ---
 
+## Prompt Design
+
+Prompts were iteratively developed during implementation and later organized under the prompts/ directory for clarity and reproducibility.
+
+---
+
 ## Example Booking Scenario
 
 ```
